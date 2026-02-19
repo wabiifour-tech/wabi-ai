@@ -25,6 +25,13 @@
     --ring: 142.1 76.2% 36.3%;
     --radius: 0.5rem;
   }
+  
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+  }
 }
 
 @layer base {
@@ -33,6 +40,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
@@ -43,17 +51,26 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: rgba(34, 197, 94, 0.3);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: rgba(34, 197, 94, 0.5);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(74, 222, 128, 0.3);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 222, 128, 0.5);
 }
 
 /* Animations */
@@ -79,6 +96,17 @@
   }
 }
 
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @keyframes pulse-glow {
   0%, 100% {
     box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
@@ -86,6 +114,17 @@
   50% {
     box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
   }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 
 .animate-fade-in {
@@ -96,8 +135,20 @@
   animation: slideIn 0.3s ease-out;
 }
 
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
 .animate-pulse-glow {
   animation: pulse-glow 2s infinite;
+}
+
+.animate-shake {
+  animation: shake 0.3s ease-out;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s infinite;
 }
 
 /* Chat styles */
@@ -110,7 +161,7 @@
 }
 
 .chat-message.assistant {
-  @apply bg-gray-100 text-gray-800;
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white;
 }
 
 /* Quiz styles */
@@ -119,17 +170,112 @@
 }
 
 .quiz-option:hover:not(.selected):not(.correct):not(.incorrect) {
-  @apply border-green-400 bg-green-50;
+  @apply border-green-400 bg-green-50 dark:bg-green-900/20;
 }
 
 .quiz-option.selected {
-  @apply border-blue-500 bg-blue-50;
+  @apply border-blue-500 bg-blue-50 dark:bg-blue-900/20;
 }
 
 .quiz-option.correct {
-  @apply border-green-500 bg-green-100;
+  @apply border-green-500 bg-green-100 dark:bg-green-900/30;
 }
 
 .quiz-option.incorrect {
-  @apply border-red-500 bg-red-100;
+  @apply border-red-500 bg-red-100 dark:bg-red-900/30;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all duration-300;
+}
+
+.card-hover:hover {
+  @apply shadow-xl scale-[1.02];
+}
+
+/* Button gradients */
+.btn-gradient {
+  @apply bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600;
+}
+
+/* Glass effect */
+.glass {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20;
+}
+
+.glass-dark {
+  @apply bg-gray-800/50 backdrop-blur-lg border border-gray-700/50;
+}
+
+/* Focus ring */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Text gradient */
+.text-gradient {
+  @apply bg-gradient-to-r from-green-500 to-teal-500 bg-clip-text text-transparent;
+}
+
+/* Progress bar animation */
+@keyframes progress {
+  from { width: 0; }
+}
+
+.progress-animate {
+  animation: progress 1s ease-out;
+}
+
+/* Tooltip */
+.tooltip {
+  @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Responsive typography */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(34, 197, 94, 0.3);
+}
+
+/* Dark mode selection */
+.dark ::selection {
+  background-color: rgba(74, 222, 128, 0.3);
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  @apply outline-none ring-2 ring-green-400 ring-offset-2;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Touch action for mobile */
+.touch-manipulation {
+  touch-action: manipulation;
 }
